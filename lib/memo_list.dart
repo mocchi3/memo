@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memo_app/edit.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MemoList extends StatefulWidget {
   @override
@@ -10,13 +11,13 @@ class MemoListState extends State<MemoList> {
   var _memoList = new List<String>();
   var _currentIndex = -1;
 
-//  bool _loading = true;
-//  final _biggerFont = const TextStyle(fontSize: 18.0);
+  bool _loading = true;
+  final _biggerFont = const TextStyle(fontSize: 18.0);
 
   @override
   void initState() {
     super.initState();
-//    this.loadMemoList();
+    this.loadMemoList();
   }
 
   // メモを追加
@@ -25,7 +26,7 @@ class MemoListState extends State<MemoList> {
     setState(() {
       _memoList.add("");
       _currentIndex = _memoList.length - 1;
-//      storeMemoList();
+      storeMemoList();
       Navigator.of(context).push(MaterialPageRoute<void>(
         builder: (BuildContext context) {
           return new Edit(_memoList[_currentIndex], _onChanged);
@@ -42,11 +43,11 @@ class MemoListState extends State<MemoList> {
       onDismissed: (direction) {
         setState(() {
           _memoList.removeAt(index);
-//          storeMemoList();
+          storeMemoList();
         });
       },
       // スワイプ削除処理
-//      child: _buildRow(content, index),
+      child: _buildRow(content, index),
     );
   }
 
@@ -90,49 +91,49 @@ class MemoListState extends State<MemoList> {
   void _onChanged(String text) {
     setState(() {
       _memoList[_currentIndex] = text;
-//      storeMemoList();
+      storeMemoList();
     });
   }
-//
-//  // ローカルに保存
-//  void storeMemoList() async {
-//    final prefs = await SharedPreferences.getInstance();
-//    const key = "memo-list";
-//    final success = await prefs.setStringList(key, _memoList);
-//    if (!success) {
-//    debugPrint("Failed to store value");
-//    }
-//  }
-//
-//  // ローカルに保存したデータ呼び出し
-//  void loadMemoList() {
-//    SharedPreferences.getInstance().then((prefs) {
-//      const key = "memo-list";
-//      if (prefs.containsKey(key)) {
-//        _memoList = prefs.getStringList(key);
-//      }
-//      setState(() {
-//        _loading = true;
-//      });
-//    });
-//  }
 
-//  // 削除処理
-//  Widget _buildRow(String content, int index) {
-//    return ListTile(
-//      title: Text(
-//        content,
-//        style: _biggerFont,
-//        maxLines: 1,
-//        overflow: TextOverflow.ellipsis,
-//      ),
-//      onTap: () {
-//        _currentIndex = index;
-//        Navigator.of(context)
-//            .push(MaterialPageRoute<void>(builder: (BuildContext context) {
-//          return new Edit(_memoList[_currentIndex], _onChanged);
-//        }));
-//      },
-//    );
-//  }
+  // ローカルに保存
+  void storeMemoList() async {
+    final prefs = await SharedPreferences.getInstance();
+    const key = "memo-list";
+    final success = await prefs.setStringList(key, _memoList);
+    if (!success) {
+      debugPrint("Failed to store value");
+    }
+  }
+
+  // ローカルに保存したデータ呼び出し
+  void loadMemoList() {
+    SharedPreferences.getInstance().then((prefs) {
+      const key = "memo-list";
+      if (prefs.containsKey(key)) {
+        _memoList = prefs.getStringList(key);
+      }
+      setState(() {
+        _loading = true;
+      });
+    });
+  }
+
+  // 削除処理
+  Widget _buildRow(String content, int index) {
+    return ListTile(
+      title: Text(
+        content,
+        style: _biggerFont,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+      ),
+      onTap: () {
+        _currentIndex = index;
+        Navigator.of(context)
+            .push(MaterialPageRoute<void>(builder: (BuildContext context) {
+          return new Edit(_memoList[_currentIndex], _onChanged);
+        }));
+      },
+    );
+  }
 }
