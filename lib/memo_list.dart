@@ -15,6 +15,30 @@ class MemoListState extends State<MemoList> {
   final _biggerFont = const TextStyle(fontSize: 18.0);
 
   @override
+  Widget build(BuildContext context) {
+    final title = "Home";
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(title),
+      ),
+      body: _buildList(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _addMemo,
+        tooltip: 'New Memo',
+        child: Icon(Icons.add),
+      ),
+    );
+    //    if (_loading) {
+//      return Scaffold(
+//        appBar: AppBar(
+//          title: Text(title),
+//        ),
+//        body: CircularProgressIndicator(),
+//      );
+//    }
+  }
+
+  @override
   void initState() {
     super.initState();
     this.loadMemoList();
@@ -62,30 +86,6 @@ class MemoListState extends State<MemoList> {
           final memo = _memoList[index];
           return _buildWrappedRow(memo, index);
         });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final title = "Home";
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-      ),
-      body: _buildList(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _addMemo,
-        tooltip: 'New Memo',
-        child: Icon(Icons.add),
-      ),
-    );
-    //    if (_loading) {
-//      return Scaffold(
-//        appBar: AppBar(
-//          title: Text(title),
-//        ),
-//        body: CircularProgressIndicator(),
-//      );
-//    }
   }
 
   void _onChanged(String text) {
